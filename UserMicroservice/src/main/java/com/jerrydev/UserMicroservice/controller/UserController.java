@@ -53,4 +53,18 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
     }
+
+    @GetMapping("{userId}/cars")
+    public ResponseEntity<?> carsByUserId(@PathVariable int userId){
+        return !userService.carsByUserId(userId).isEmpty() ?
+                ResponseEntity.status(HttpStatus.OK).body(userService.carsByUserId(userId)):
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body("No cars found for user with id: "+userId);
+    }
+
+    @GetMapping("{userId}/biks")
+    public ResponseEntity<?> biksByUserId(@PathVariable int userId){
+        return !userService.bikesByUserId(userId).isEmpty()?
+                ResponseEntity.status(HttpStatus.OK).body(userService.bikesByUserId(userId)):
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body("No bikes found for user with id: "+userId);
+    }
 }

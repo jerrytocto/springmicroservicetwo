@@ -1,11 +1,14 @@
 package com.jerrydev.UserMicroservice.service.impl;
 
+import com.jerrydev.UserMicroservice.dto.BikeDTO;
+import com.jerrydev.UserMicroservice.dto.CarDTO;
 import com.jerrydev.UserMicroservice.dto.MapperUser;
 import com.jerrydev.UserMicroservice.dto.UserDTO;
 import com.jerrydev.UserMicroservice.entity.User;
 import com.jerrydev.UserMicroservice.exeption.DatabaseOperationException;
 import com.jerrydev.UserMicroservice.exeption.ResourceNotFoundException;
 import com.jerrydev.UserMicroservice.repository.UserRepository;
+import com.jerrydev.UserMicroservice.restemplateconfig.UserRestTemplate;
 import com.jerrydev.UserMicroservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private MapperUser mapperUser ;
+
+    @Autowired
+    private UserRestTemplate userRestTemplate;
 
     @Override
     public List<UserDTO> getAllUser() {
@@ -73,5 +79,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(int userId) {
 
+    }
+
+    @Override
+    public List<CarDTO> carsByUserId(int userId) {
+
+        List<CarDTO> carDTOList = userRestTemplate.restTemplate().getForObject(
+                "http://localhost:8082/api/v1/cars/user/"+userId, List.class);
+        return carDTOList;
+    }
+
+    @Override
+    public List<BikeDTO> bikesByUserId(int userId) {
+
+        List<BikeDTO> bikeDTOList = userRestTemplate.restTemplate().getForObject(
+                "http://localhost:8083/api/v1/biks/user/"+userId, List.class);
+
+        return bikeDTOList;
     }
 }

@@ -1,5 +1,7 @@
 package com.jerrydev.UserMicroservice.service;
 
+import com.jerrydev.UserMicroservice.dto.BikeDTO;
+import com.jerrydev.UserMicroservice.dto.CarDTO;
 import com.jerrydev.UserMicroservice.dto.UserDTO;
 import com.jerrydev.UserMicroservice.entity.User;
 
@@ -17,4 +19,7 @@ public interface UserService {
 
     void deleteUser(int userId);
 
+    List<CarDTO> carsByUserId(int userId);
+
+    List<BikeDTO> bikesByUserId(int userId);
 }

@@ -18,4 +18,5 @@ public interface CarService {
     void deleteCar(int carId);
 
     List<CarDTO> carsByUserId(int userId);
+
 }
