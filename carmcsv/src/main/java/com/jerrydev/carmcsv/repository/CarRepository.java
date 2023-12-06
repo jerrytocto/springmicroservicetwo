@@ -16,4 +16,5 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     List<Car> carsByUserId(@Param("userId") int userId);
 
     List<Car> findByUserId(int userId);
+
 }
