@@ -78,4 +78,26 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{userId}/car")
+    public ResponseEntity<?> carsByUserId(@PathVariable int userId){
+        try{
+            return ResponseEntity.ok().body(userService.findAllCarsByUserId(userId));
+        }catch (ResourceAccessException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }catch (DatabaseOperationException ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/{userId}/bike")
+    public ResponseEntity<?> bikesByUserId(@PathVariable int userId){
+        try{
+            return ResponseEntity.ok().body(userService.findAllBikesByUserId(userId));
+        }catch (ResourceAccessException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }catch (DatabaseOperationException ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
+
 }

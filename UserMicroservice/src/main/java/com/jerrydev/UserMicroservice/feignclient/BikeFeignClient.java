@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 @FeignClient(name = "mcsv-Bike",url = "http://localhost:8083/api/v1/biks")
 public interface BikeFeignClient {
 
@@ -14,5 +16,5 @@ public interface BikeFeignClient {
     BikeDTO saveBike(@RequestBody BikeDTO bikeDTO);
 
     @GetMapping("/user/{userId}")
-    BikeDTO bikesByUserId(@PathVariable int userId);
+    List<BikeDTO> bikesByUserId(@PathVariable int userId);
 }

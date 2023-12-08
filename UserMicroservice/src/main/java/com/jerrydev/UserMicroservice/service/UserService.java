@@ -23,4 +23,8 @@ public interface UserService {
 
     BikeDTO saveBike(int userId,BikeDTO bikeDTO);
 
+    List<CarDTO> findAllCarsByUserId(int userId);
+
+    List<BikeDTO> findAllBikesByUserId(int userId);
+
 }

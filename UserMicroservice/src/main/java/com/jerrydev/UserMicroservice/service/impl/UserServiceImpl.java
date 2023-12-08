@@ -83,7 +83,6 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(int userId) {
 
     }
-
     @Override
     public CarDTO saveCar(int userId,CarDTO carDTO) {
 
@@ -114,4 +113,25 @@ public class UserServiceImpl implements UserService {
             throw new DatabaseOperationException("Guardar usuario", "Error al intentar guardar un curso", ex);
         }
     }
+
+    @Override
+    public List<CarDTO> findAllCarsByUserId(int userId) {
+
+        User user = userRepository.findById(userId).
+                orElseThrow(()-> new  ResourceNotFoundException("Listar carros por usuario","userId",userId));
+
+        List<CarDTO> carDTOList = carFeignClient.carsByUserId(userId);
+        return carDTOList;
+    }
+
+    @Override
+    public List<BikeDTO> findAllBikesByUserId(int userId) {
+        User user = userRepository.findById(userId).
+                orElseThrow(()-> new  ResourceNotFoundException("Listar carros por usuario","userId",userId));
+
+        List<BikeDTO> bikeDTOList = bikeFeignClient.bikesByUserId(userId);
+        return bikeDTOList;
+    }
+
+
 }
