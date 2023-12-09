@@ -20,6 +20,7 @@
 		<module>UserMicroservice</module>
 		<module>bikemcsv</module>
 		<module>carmcsv</module>
+		<module>configserver</module>
 	</modules>
 
 
