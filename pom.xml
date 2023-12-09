@@ -21,6 +21,7 @@
 		<module>bikemcsv</module>
 		<module>carmcsv</module>
 		<module>configserver</module>
+		<module>eurekaconfig</module>
 	</modules>
 
 
