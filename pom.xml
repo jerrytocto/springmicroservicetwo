@@ -22,8 +22,8 @@
 		<module>carmcsv</module>
 		<module>configserver</module>
 		<module>eurekaconfig</module>
+		<module>gateway-server</module>
 	</modules>
-
 
 	<packaging>pom</packaging>
 
