@@ -7,6 +7,7 @@ import com.jerrydev.UserMicroservice.entity.User;
 import com.jerrydev.UserMicroservice.exeption.DatabaseOperationException;
 import com.jerrydev.UserMicroservice.exeption.ResourceNotFoundException;
 import com.jerrydev.UserMicroservice.service.UserService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +57,7 @@ public class UserController {
         }
     }
 
+    @CircuitBreaker(name = "carsCB", fallbackMethod = "fallbackSaveCar")
     @PostMapping("/{userId}/car")
     public ResponseEntity<?> saveCar(@PathVariable int userId, @RequestBody CarDTO carDTO){
         try{
@@ -67,6 +69,19 @@ public class UserController {
         }
     }
 
+    @CircuitBreaker(name = "carsCB", fallbackMethod = "fallbackCarsByUserId")
+    @GetMapping("/{userId}/cars")
+    public ResponseEntity<?> carsByUserId(@PathVariable int userId){
+        try{
+            return ResponseEntity.ok().body(userService.findAllCarsByUserId(userId));
+        }catch (ResourceAccessException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }catch (DatabaseOperationException ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
+
+    @CircuitBreaker(name = "bikesCB", fallbackMethod = "fallbackSaveBike")
     @PostMapping("/{userId}/bike")
     public ResponseEntity<?> saveBike(@PathVariable int userId, @RequestBody BikeDTO bikeDTO){
         try{
@@ -78,18 +93,8 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{userId}/car")
-    public ResponseEntity<?> carsByUserId(@PathVariable int userId){
-        try{
-            return ResponseEntity.ok().body(userService.findAllCarsByUserId(userId));
-        }catch (ResourceAccessException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }catch (DatabaseOperationException ex){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        }
-    }
-
-    @GetMapping("/{userId}/bike")
+    @CircuitBreaker(name = "bikesCB", fallbackMethod = "fallbackBikesByUserId")
+    @GetMapping("/{userId}/bikes")
     public ResponseEntity<?> bikesByUserId(@PathVariable int userId){
         try{
             return ResponseEntity.ok().body(userService.findAllBikesByUserId(userId));
@@ -98,5 +103,21 @@ public class UserController {
         }catch (DatabaseOperationException ex){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
+    }
+
+    private ResponseEntity<?> fallbackSaveCar(int userId, CarDTO carDTO, RuntimeException ex){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al guardar el carro");
+    }
+
+    private ResponseEntity<?> fallbackCarsByUserId(int userId, RuntimeException ex){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener los carros");
+    }
+
+    private ResponseEntity<?> fallbackSaveBike(int userId, BikeDTO bikeDTO, RuntimeException ex){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al guardar la moto");
+    }
+
+    private ResponseEntity<?> fallbackBikesByUserId(int userId, RuntimeException ex){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener las motos");
     }
 }
