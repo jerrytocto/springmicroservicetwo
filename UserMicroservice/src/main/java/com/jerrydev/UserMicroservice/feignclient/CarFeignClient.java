@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "mcsv-car", url = "http://localhost:8001/api/v1/cars")
+@FeignClient(name = "mcsv-car", url = "http://localhost:8082/api/v1/cars")
 public interface CarFeignClient {
 
     @GetMapping("/user/{userId}")
