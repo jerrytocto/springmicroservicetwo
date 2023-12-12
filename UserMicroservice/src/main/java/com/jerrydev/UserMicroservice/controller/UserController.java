@@ -1,5 +1,6 @@
 package com.jerrydev.UserMicroservice.controller;
 
+import com.jerrydev.UserMicroservice.dto.BikeDTO;
 import com.jerrydev.UserMicroservice.dto.CarDTO;
 import com.jerrydev.UserMicroservice.dto.UserDTO;
 import com.jerrydev.UserMicroservice.entity.User;
@@ -48,6 +49,50 @@ public class UserController {
     public ResponseEntity<?> updateUser(@PathVariable int userId, @RequestBody UserDTO userDTO){
         try{
             return ResponseEntity.ok().body(userService.updateUser(userDTO,userId));
+        }catch (ResourceAccessException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }catch (DatabaseOperationException ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
+
+    @PostMapping("/{userId}/car")
+    public ResponseEntity<?> saveCar(@PathVariable int userId, @RequestBody CarDTO carDTO){
+        try{
+            return ResponseEntity.ok().body(userService.saveCar(userId,carDTO));
+        }catch (ResourceAccessException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }catch (DatabaseOperationException ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
+
+    @PostMapping("/{userId}/bike")
+    public ResponseEntity<?> saveBike(@PathVariable int userId, @RequestBody BikeDTO bikeDTO){
+        try{
+            return ResponseEntity.ok().body(userService.saveBike(userId,bikeDTO));
+        }catch (ResourceAccessException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }catch (DatabaseOperationException ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/{userId}/car")
+    public ResponseEntity<?> carsByUserId(@PathVariable int userId){
+        try{
+            return ResponseEntity.ok().body(userService.findAllCarsByUserId(userId));
+        }catch (ResourceAccessException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }catch (DatabaseOperationException ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/{userId}/bike")
+    public ResponseEntity<?> bikesByUserId(@PathVariable int userId){
+        try{
+            return ResponseEntity.ok().body(userService.findAllBikesByUserId(userId));
         }catch (ResourceAccessException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }catch (DatabaseOperationException ex){
